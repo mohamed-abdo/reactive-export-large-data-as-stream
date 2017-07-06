@@ -1,0 +1,29 @@
+﻿@{
+    ViewBag.Title = "Home Page";
+}
+<div class="jumbotron">
+    <p>Download large file contents (hundrads of thousands of records)....</p>
+    <br />
+    <form role="form" id="frm-merchantId" method="get" action="@Url.Action("ReactiveDownloadReport","Download")">
+        <div class="form-group">
+            <label>reportName</label>
+            <input type="text" id="reportName" name="reportName" value="reportName" required placeholder="Enter reportName" class="form-control">
+        </div>
+        <div class="form-group">
+            <label>recordsToDownload (in progress feature)</label>
+            <input type="number" id="recordsToDownload" disabled value="10000" name="recordsToDownload" required placeholder="recordsToDownload" class="form-control">
+        </div>
+        <div class="form-group">
+            <label>fileName</label>
+            <input type="text" id="fileName" name="fileName" value="downloadFile.txt" required placeholder="Enter fileName" class="form-control">
+        </div>
+        <div class="form-group">
+            <label>target</label>
+            <input type="text" id="target" name="target" value="txt" required placeholder="Enter target (pdf | xlsx | Text)" class="form-control">
+        </div>
+
+        <div>
+            <button class="btn btn-sm btn-primary pull-right m-t-n-xs" type="submit"><strong>Download</strong></button>
+        </div>
+    </form>
+</div>

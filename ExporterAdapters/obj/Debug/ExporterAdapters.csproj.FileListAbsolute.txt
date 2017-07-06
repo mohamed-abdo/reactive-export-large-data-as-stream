@@ -1,0 +1,1 @@
+D:\mabdo\Projects\reactive-export-large-data-as-stream\ExporterAdapters\obj\Debug\ExporterAdapters.csprojResolveAssemblyReference.cache
