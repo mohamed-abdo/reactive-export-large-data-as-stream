@@ -231,14 +231,9 @@ namespace reactive_download.Helper
                 }
                 string httpMessage;
                 var responseModel = Utilities.GetHttpModel<ResultBreif>(reportApiresponse, out httpMessage);
-                //TODO: remove overriding total records, since in real cases this number should be controlled by backend api, to refelct how many records  available for this request.
+                //TODO: remove overriding total records,  in real cases this number should be controlled by back-end api, which refelcts how many records available for this request.
                 if (limitDownloadRecords.HasValue)
-                {
-                    if (limitDownloadRecords.Value > INITIAL_PAYLOAD)
-                        _report.TotalRecords = limitDownloadRecords.Value;
-                    else
-                        _report.TotalRecords = limitDownloadRecords.Value;
-                }
+                    _report.TotalRecords = limitDownloadRecords.Value;
                 else
                     _report.TotalRecords = responseModel.TotalRecords;
                 _report.ReportName = responseModel.ReportName;
