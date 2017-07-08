@@ -26,9 +26,6 @@ namespace reactive_download.Helper
         private Report _report;
         private const string CONTENT_TYPE = "application/json";
         private readonly APIEndpoints _apiEndPoint;
-        const int INITIAL_PAYLOAD = 100;//minimum number of records to get from api.
-        const int MAX_PAYLOAD = 1000;
-        const int THREESHOLD = 30;//seconds
         private const int START_INDEX_FROM = 0;
         private const int DOWNLOAD_PAGE_SIZE = 1000;
         internal int? getCurrentModelTotalRecords => _report.TotalRecords;
@@ -231,15 +228,8 @@ namespace reactive_download.Helper
                 }
                 string httpMessage;
                 var responseModel = Utilities.GetHttpModel<ResultBreif>(reportApiresponse, out httpMessage);
-                // since the total number of records is just for demo, i belive you in real usage your backend api should control how many records available for your call.
-                //TODO: remove this condition in real api calls
                 if (limitDownloadRecords.HasValue)
-                {
-                    if (limitDownloadRecords.Value > INITIAL_PAYLOAD)
-                        _report.TotalRecords = limitDownloadRecords.Value - INITIAL_PAYLOAD;
-                    else
-                        _report.TotalRecords = limitDownloadRecords.Value;
-                }
+                    _report.TotalRecords = limitDownloadRecords.Value;
                 else
                     _report.TotalRecords = responseModel.TotalRecords;
                 _report.ReportName = responseModel.ReportName;
@@ -249,6 +239,9 @@ namespace reactive_download.Helper
         }
         public static Func<int, int?, double?, int> getDownloadPageSize = (totalRecords, lastPayLoad, responseTime) =>
         {
+            const int INITIAL_PAYLOAD = 100;//minimum number of records to get from api.
+            const int MAX_PAYLOAD = 1000;
+            const int THREESHOLD = 30;//seconds
             var locker = new object();
             lock (locker)
             {
