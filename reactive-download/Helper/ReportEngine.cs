@@ -27,6 +27,9 @@ namespace reactive_download.Helper
         private const string CONTENT_TYPE = "application/json";
         private readonly APIEndpoints _apiEndPoint;
         private const int START_INDEX_FROM = 0;
+        const int INITIAL_PAYLOAD = 100;//minimum number of records to get from api.
+        const int MAX_PAYLOAD = 1000;
+        const int THREESHOLD = 30;//seconds
         private const int DOWNLOAD_PAGE_SIZE = 1000;
         internal int? getCurrentModelTotalRecords => _report.TotalRecords;
 
@@ -228,8 +231,14 @@ namespace reactive_download.Helper
                 }
                 string httpMessage;
                 var responseModel = Utilities.GetHttpModel<ResultBreif>(reportApiresponse, out httpMessage);
+                //TODO: remove overriding total records, since in real cases this number should be controlled by backend api, to refelct how many records  available for this request.
                 if (limitDownloadRecords.HasValue)
-                    _report.TotalRecords = limitDownloadRecords.Value;
+                {
+                    if (limitDownloadRecords.Value > INITIAL_PAYLOAD)
+                        _report.TotalRecords = limitDownloadRecords.Value;
+                    else
+                        _report.TotalRecords = limitDownloadRecords.Value;
+                }
                 else
                     _report.TotalRecords = responseModel.TotalRecords;
                 _report.ReportName = responseModel.ReportName;
@@ -239,9 +248,6 @@ namespace reactive_download.Helper
         }
         public static Func<int, int?, double?, int> getDownloadPageSize = (totalRecords, lastPayLoad, responseTime) =>
         {
-            const int INITIAL_PAYLOAD = 100;//minimum number of records to get from api.
-            const int MAX_PAYLOAD = 1000;
-            const int THREESHOLD = 30;//seconds
             var locker = new object();
             lock (locker)
             {
