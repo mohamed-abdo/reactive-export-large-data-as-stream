@@ -27,8 +27,9 @@ namespace reactive_download.Controllers
     /// </summary>
     public class DownloadController : Controller
     {
-        const int MAX_RECORDS_TO_DOWNLOAD = 2147483647;// max signed int value
-        const int WORKER_THREADS = 1;
+        const int MAX_RECORDS_TO_DOWNLOAD = int.MaxValue;// max signed int value
+        const int START_INDEX_FROM = 0;
+        const int WORKER_THREADS = 5;
         const int TIMEOUT_IN_HOURS = 3;
         const int NOTIFY_INTERVAL_IN_MS = 5000;
         readonly APIEndpoints _apiEndpoints = new APIEndpoints()
@@ -145,8 +146,8 @@ namespace reactive_download.Controllers
             Func<int, initialDataInfo> getNextDownloadPacketInfo = (totalRecords) =>
             {
                 mutexLocker.WaitOne();
-                var nextPayLoad = Helper.ReportEngine.getDownloadPageSize(lastPayLoad, lastResponseTime);
-                var maxStartFrom = 1;
+                var nextPayLoad = Helper.ReportEngine.getDownloadPageSize(totalRecords, lastPayLoad, lastResponseTime);
+                var maxStartFrom = START_INDEX_FROM;
                 if (initialDataCollection.Count > 0)
                     maxStartFrom = initialDataCollection.Last().startInfo + initialDataCollection.Last().pageSize;
                 var nextDownloadInfo = new initialDataInfo() { startInfo = maxStartFrom, pageSize = nextPayLoad };
@@ -398,9 +399,8 @@ namespace reactive_download.Controllers
             Func<int, initialDataInfo> getNextDownloadPacketInfo = (totalRecords) =>
             {
                 mutexLocker.WaitOne();
-                var nextPayLoad = Helper.ReportEngine.getDownloadPageSize(lastPayLoad, lastResponseTime);
-                nextPayLoad = Math.Min(totalRecords, nextPayLoad);//get the less value
-                var maxStartFrom = 0;
+                var nextPayLoad = Helper.ReportEngine.getDownloadPageSize(totalRecords, lastPayLoad, lastResponseTime);
+                var maxStartFrom = START_INDEX_FROM;
                 if (initialDataCollection.Count > 0)
                     maxStartFrom = initialDataCollection.Last().startInfo + initialDataCollection.Last().pageSize;
                 var nextDownloadInfo = new initialDataInfo() { startInfo = maxStartFrom, pageSize = nextPayLoad };
@@ -428,7 +428,7 @@ namespace reactive_download.Controllers
                 mutexLocker.ReleaseMutex();
                 return (result || maxStartInfoPageSize >= totalRecors);// data ready on single packet case or waiting for last exporter callback
             };
-            int nextStartFromStaging = 1;
+            int nextStartFromStaging = 0;
             Action<int> fillReadyQueueWorker = (totalRecords) =>
             {
                 //CommonItems.Logger.Trace($"fillReadyQueueWorker => Starting thread {Thread.CurrentThread.ManagedThreadId}, start processing signal ...");
