@@ -1,4 +1,4 @@
-﻿using Newtonsoft.Json;
+using Newtonsoft.Json;
 using reactive_download.Models;
 using System;
 using System.Collections.Generic;
@@ -26,6 +26,8 @@ namespace reactive_download.Helper
         private Report _report;
         private const string CONTENT_TYPE = "application/json";
         private readonly APIEndpoints _apiEndPoint;
+        private const int START_INDEX_FROM = 0;
+        private const int DOWNLOAD_PAGE_SIZE = 1000;
         internal int? getCurrentModelTotalRecords => _report.TotalRecords;
 
         /// <summary>
@@ -41,14 +43,14 @@ namespace reactive_download.Helper
             string httpMessage = string.Empty;
             Func<int, int> getDownloadPageSize = (totalRecords) =>
             {
-                return 1000;
+                return DOWNLOAD_PAGE_SIZE;
             };
             int pagesize = getDownloadPageSize(_report.TotalRecords);
             try
             {
                 // Call API...
                 var reportApiClient = GetReportStatsHttpClient(httpRequest, limitDownloadRecords);
-                int startFrom = 0;
+                int startFrom = START_INDEX_FROM;
                 List<DataTable> dataset = new List<DataTable>();
                 while (startFrom < _report.TotalRecords)
                 {
@@ -77,11 +79,11 @@ namespace reactive_download.Helper
             int currentpagesize = 0;
             var cancellationToken = new CancellationTokenSource(TimeSpan.FromHours(TIME_OUT));
             string httpMessage = string.Empty;
-            int startFrom = 0;
+            int startFrom = START_INDEX_FROM;
             int idx = 0;
             while (startFrom < _report.TotalRecords)
             {
-                currentpagesize = getDownloadPageSize(currentpagesize, responseInSeconds);
+                currentpagesize = getDownloadPageSize(_report.TotalRecords, currentpagesize, responseInSeconds);
 #if DEBUG
                 System.Diagnostics.Debug.Print("Begin Call Report API => index => {0}, startFrom =>{1}, pagesize=>{2}, url=>{3}, snapshot=> {4}, at=> {5}",
                     idx++, startFrom, currentpagesize, $"{_apiEndPoint.Data}?startFrom={startFrom}&pagesize={currentpagesize}", _report.Criteria, DateTime.Now.ToString());
@@ -209,7 +211,7 @@ namespace reactive_download.Helper
             return httpClient;
         }
 
-        public HttpClient GetReportStatsHttpClient(HttpRequestBase httpRequest,int? limitDownloadRecords=null)
+        public HttpClient GetReportStatsHttpClient(HttpRequestBase httpRequest, int? limitDownloadRecords = null)
         {
             // Getting API client and check identity
             var userIdentity = HttpContext.Current.GetOwinContext().Authentication.User;
@@ -235,16 +237,19 @@ namespace reactive_download.Helper
             }
             return reportApiClient;
         }
-        public static Func<int?, double?, int> getDownloadPageSize = (lastPayLoad, responseTime) =>
+        public static Func<int, int?, double?, int> getDownloadPageSize = (totalRecords, lastPayLoad, responseTime) =>
         {
             const int INITIAL_PAYLOAD = 100;//minimum number of records to get from api.
-            const int MAX_PAYLOAD = 10000;
+            const int MAX_PAYLOAD = 1000;
             const int THREESHOLD = 30;//seconds
             var locker = new object();
             lock (locker)
             {
                 int proposdPayLoad = (int)((THREESHOLD / (responseTime ?? THREESHOLD)) * (lastPayLoad ?? INITIAL_PAYLOAD));
-                return Math.Min(proposdPayLoad, MAX_PAYLOAD);
+                var minProposedPayLoad = Math.Min(proposdPayLoad, MAX_PAYLOAD);
+                if (totalRecords <= INITIAL_PAYLOAD)
+                    return Math.Min(proposdPayLoad, totalRecords);
+                return Math.Min(minProposedPayLoad, (totalRecords - INITIAL_PAYLOAD));
             }
         };
 
