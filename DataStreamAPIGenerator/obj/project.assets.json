@@ -10814,10 +10814,10 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\mabdo\\Projects\\reactive-export-large-data-as-stream\\DataStreamAPIGenerator\\DataStreamAPIGenerator.csproj",
+      "projectUniqueName": "C:\\Users\\abdo\\Source\\Repos\\reactive-export-large-data-as-stream\\DataStreamAPIGenerator\\DataStreamAPIGenerator.csproj",
       "projectName": "DataStreamAPIGenerator",
-      "projectPath": "D:\\mabdo\\Projects\\reactive-export-large-data-as-stream\\DataStreamAPIGenerator\\DataStreamAPIGenerator.csproj",
-      "outputPath": "D:\\mabdo\\Projects\\reactive-export-large-data-as-stream\\DataStreamAPIGenerator\\obj\\",
+      "projectPath": "C:\\Users\\abdo\\Source\\Repos\\reactive-export-large-data-as-stream\\DataStreamAPIGenerator\\DataStreamAPIGenerator.csproj",
+      "outputPath": "C:\\Users\\abdo\\Source\\Repos\\reactive-export-large-data-as-stream\\DataStreamAPIGenerator\\obj\\",
       "projectStyle": "PackageReference",
       "originalTargetFrameworks": [
         "netcoreapp1.1"

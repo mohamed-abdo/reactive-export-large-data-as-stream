@@ -1,0 +1,9 @@
+C:\Users\abdo\Source\Repos\reactive-export-large-data-as-stream\DataStreamAPIGenerator\bin\Debug\netcoreapp1.1\DataStreamAPIGenerator.deps.json
+C:\Users\abdo\Source\Repos\reactive-export-large-data-as-stream\DataStreamAPIGenerator\bin\Debug\netcoreapp1.1\DataStreamAPIGenerator.runtimeconfig.json
+C:\Users\abdo\Source\Repos\reactive-export-large-data-as-stream\DataStreamAPIGenerator\bin\Debug\netcoreapp1.1\DataStreamAPIGenerator.runtimeconfig.dev.json
+C:\Users\abdo\Source\Repos\reactive-export-large-data-as-stream\DataStreamAPIGenerator\bin\Debug\netcoreapp1.1\DataStreamAPIGenerator.dll
+C:\Users\abdo\Source\Repos\reactive-export-large-data-as-stream\DataStreamAPIGenerator\bin\Debug\netcoreapp1.1\DataStreamAPIGenerator.pdb
+C:\Users\abdo\Source\Repos\reactive-export-large-data-as-stream\DataStreamAPIGenerator\obj\Debug\netcoreapp1.1\DataStreamAPIGenerator.AssemblyInfo.cs
+C:\Users\abdo\Source\Repos\reactive-export-large-data-as-stream\DataStreamAPIGenerator\obj\Debug\netcoreapp1.1\DataStreamAPIGenerator.dll
+C:\Users\abdo\Source\Repos\reactive-export-large-data-as-stream\DataStreamAPIGenerator\obj\Debug\netcoreapp1.1\DataStreamAPIGenerator.pdb
+C:\Users\abdo\Source\Repos\reactive-export-large-data-as-stream\DataStreamAPIGenerator\obj\Debug\netcoreapp1.1\DataStreamAPIGenerator.csprojResolveAssemblyReference.cache
